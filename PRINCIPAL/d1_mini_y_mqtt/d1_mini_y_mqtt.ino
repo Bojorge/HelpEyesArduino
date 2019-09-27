@@ -6,10 +6,11 @@
 #include <OneWire.h>
 
 
-#define Pecho D2
-#define Ptrig D1
-#define Ptrig2 D7
+
 #define Pecho2 D6
+#define Ptrig2 D7
+#define Pecho D6
+#define Ptrig D7
 
 long duracion, distancia, duracion2, distancia2;
 /*
@@ -49,8 +50,8 @@ void setup() {
   //digitalWrite(12, LOW);
   pinMode(Pecho, INPUT);     // define el pin D7 como entrada (echo)
   pinMode(Ptrig, OUTPUT);    // define el pin D6 como salida  (triger)
-  pinMode(Ptrig2, OUTPUT);    // define el pin D6 como salida  (triger)
   pinMode(Pecho2, INPUT);     // define el pin D5 como entrada (echo)
+  pinMode(Ptrig2, OUTPUT);    // define el pin D6 como salida  (triger)
 
 
   WiFi.begin(ssid, password);
@@ -198,7 +199,7 @@ void loop() {
     client.publish(topic1, "c");
   }  
   */
-   /*
+   
   if (distancia <= 30 && distancia >= 0){
     client.publish(topic1, "x");
   }
@@ -211,9 +212,10 @@ void loop() {
     Serial.print(distancia);
     Serial.println(" cm");
                      
-  }*/
-  Serial.println(distancia);
+  }
   Serial.println(distancia2);
+  Serial.println(distancia);
+  Serial.println();
   
   /*
   byte i;
