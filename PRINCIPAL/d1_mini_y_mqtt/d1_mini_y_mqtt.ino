@@ -36,13 +36,13 @@ void callback(char* topic, byte* payload, unsigned int length);
 
 void setup() {
   Serial.begin(115200);
-  /*
-  sensors.begin(); //Se inician los sensores
-  //pinMode(12, OUTPUT); // D6 salida digital
+  
+  //sensors.begin(); //Se inician los sensores
+  pinMode(12, OUTPUT); // D6 salida digital
   digitalWrite(12, LOW);
-  pinMode(Pecho, INPUT);     // define el pin 6 como entrada (echo)
-  pinMode(Ptrig, OUTPUT);    // define el pin 7 como salida  (triger)
-  */
+  //pinMode(Pecho, INPUT);     // define el pin 6 como entrada (echo)
+  //pinMode(Ptrig, OUTPUT);    // define el pin 7 como salida  (triger)
+  
 
   WiFi.begin(ssid, password);
 
@@ -58,7 +58,6 @@ void setup() {
     Serial.println("Conectando a MQTT...\n");
     if (client.connect(clientID, mqttUser, mqttPassword )) {
       Serial.println("¡conectado a MQTT!");
-      //break;
     } else {
       Serial.print("failed with state ");
       Serial.print(client.state());
@@ -83,58 +82,43 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println(PAYLOAD);
 
-  if (String(topic) ==  String(SALIDADIGITAL)) {
-    Serial.print("mensaje recibido  >>>   ");
-    /*
-    if (payload[1] == 'a'){
-     //digitalWrite(12, HIGH);
+  //avisar al usuario (usar vibradores y otras cosas)
+  if (String(topic) ==  String(SALIDADIGITAL)) {    
+    if (payload[0] == 'd'){
+     digitalWrite(12, HIGH);
+     Serial.println("esta oscuro");
     }
-    else if (payload[1] == 'i'){
-      //digitalWrite(12, LOW);
-    }
-    */
-    //avisar al usuario (usar vibradores y otras cosas)
-    if (PAYLOAD=="dark"){
-      Serial.println("esta oscuro");
-      Serial.println(PAYLOAD);
-    }
-    else if (PAYLOAD=="light"){
+    else if (payload[0] == 'l'){
       Serial.println("mucha luz");
-      Serial.println(PAYLOAD);
+      digitalWrite(12, LOW);
     }
-    else if (PAYLOAD=="hot"){
+    else if (payload[0] == 'h'){
       Serial.println("muy cliente");
-      Serial.println(PAYLOAD);
+      
     }
-    else if (PAYLOAD=="cold"){
+    else if (payload[0] == 'c'){
       Serial.println("temperatura baja");
-      Serial.println(PAYLOAD);
+      
     }
-    else if (PAYLOAD=="incL"){
+    else if (payload[0] == 'L'){
       Serial.println("inclinacion hacia la izquierda");
       Serial.println(PAYLOAD);
     }
-    else if (PAYLOAD=="incR"){
+    else if (payload[0] == 'R'){
       Serial.println("inclinacion hacia la derecha");
-      Serial.println(PAYLOAD);
     }
-    else if (PAYLOAD=="frte"){
+    else if (payload[0] == 'f'){
       Serial.println("caida de frente");
-      Serial.println(PAYLOAD);
-    }
-    else if (PAYLOAD=="esp"){
+      }
+    else if (payload[0] == 'e'){
       Serial.println("caida de espalda");
-      Serial.println(PAYLOAD);
-    }
-    else if (PAYLOAD=="beat"){
+      }
+    else if (payload[0] == 'x'){
       Serial.println("golpe asegurado");
-      Serial.println(PAYLOAD);
-    }
-    else if (PAYLOAD=="warn"){
+      }
+    else if (payload[0] == 'p'){
       Serial.println("obstaculo a menos de un metro");
-      Serial.println(PAYLOAD);
-      
-    }
+      }
   }
 }
 
@@ -187,20 +171,19 @@ void loop() {
   /*
     
   if (temperatura> 30){
-    client.publish(topic1, "hot");
+    client.publish(topic1, "h");
   }
   
   if (temperatura< 20){
-    client.publish(topic1, "cold");
+    client.publish(topic1, "c");
   }  
 
   if (distancia <= 30 && distancia >= 0){
-    client.publish(topic1, "beat");
+    client.publish(topic1, "x");
   }
   
   if (distancia <= 100 && distancia >= 31){
-    client.publish(topic1, "warn");
-    Serial.print("PELIGRO hay un obstaculo a menos de un metro");
+    client.publish(topic1, "p");
   }
   if (distancia <= 500 && distancia >= 101){  // si la distancia es mayor a 100cm o menor a 500cm 
     Serial.print("hay un obstaculo a: ");
