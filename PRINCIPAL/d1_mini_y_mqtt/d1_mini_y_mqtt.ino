@@ -4,6 +4,7 @@
 //#include <SPI.h>
 #include <DallasTemperature.h>
 
+/*
 #define Pecho D6
 #define Ptrig D7
 #define Pin 2 //Se declara el pin D4 donde se conectará el sensor de temperatura
@@ -11,7 +12,7 @@ OneWire ourWire(Pin); //Se establece el pin declarado como bus para la comunicac
 DallasTemperature sensors(&ourWire); //Se instancia la librería DallasTemperature
 String temperatura;
 long duracion, distancia;
-
+*/
 
 const char* ssid = "HUAWEI-B315-9255";
 const char* password =  "F6LFARAH69H";
@@ -35,13 +36,13 @@ void callback(char* topic, byte* payload, unsigned int length);
 
 void setup() {
   Serial.begin(115200);
+  /*
   sensors.begin(); //Se inician los sensores
   //pinMode(12, OUTPUT); // D6 salida digital
   digitalWrite(12, LOW);
   pinMode(Pecho, INPUT);     // define el pin 6 como entrada (echo)
   pinMode(Ptrig, OUTPUT);    // define el pin 7 como salida  (triger)
- 
-
+  */
 
   WiFi.begin(ssid, password);
 
@@ -83,40 +84,55 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println(PAYLOAD);
 
   if (String(topic) ==  String(SALIDADIGITAL)) {
+    Serial.print("mensaje recibido  >>>   ");
+    /*
     if (payload[1] == 'a'){
      //digitalWrite(12, HIGH);
     }
     else if (payload[1] == 'i'){
       //digitalWrite(12, LOW);
     }
-    else if (PAYLOAD=="dark"){
-      //digitalWrite(12, HIGH);
+    */
+    //avisar al usuario (usar vibradores y otras cosas)
+    if (PAYLOAD=="dark"){
+      Serial.println("esta oscuro");
+      Serial.println(PAYLOAD);
     }
     else if (PAYLOAD=="light"){
-      //digitalWrite(12, LOW);
+      Serial.println("mucha luz");
+      Serial.println(PAYLOAD);
     }
     else if (PAYLOAD=="hot"){
-      
+      Serial.println("muy cliente");
+      Serial.println(PAYLOAD);
     }
     else if (PAYLOAD=="cold"){
-      
+      Serial.println("temperatura baja");
+      Serial.println(PAYLOAD);
     }
     else if (PAYLOAD=="incL"){
-      
+      Serial.println("inclinacion hacia la izquierda");
+      Serial.println(PAYLOAD);
     }
     else if (PAYLOAD=="incR"){
-      
+      Serial.println("inclinacion hacia la derecha");
+      Serial.println(PAYLOAD);
     }
     else if (PAYLOAD=="frte"){
-      
+      Serial.println("caida de frente");
+      Serial.println(PAYLOAD);
     }
     else if (PAYLOAD=="esp"){
-      
+      Serial.println("caida de espalda");
+      Serial.println(PAYLOAD);
     }
     else if (PAYLOAD=="beat"){
-      
+      Serial.println("golpe asegurado");
+      Serial.println(PAYLOAD);
     }
     else if (PAYLOAD=="warn"){
+      Serial.println("obstaculo a menos de un metro");
+      Serial.println(PAYLOAD);
       
     }
   }
@@ -148,6 +164,7 @@ void reconnect() {
 
 
 void loop() {
+  /*
   sensors.requestTemperatures(); //Prepara el sensor para la lectura de temperatura
   float temperatura = sensors.getTempCByIndex(0);
 
@@ -160,15 +177,17 @@ void loop() {
   duracion = pulseIn(Pecho, HIGH);
   distancia = (duracion/2) / 29;            // calcula la distancia en centimetros
 
+  */
   
   if (!client.connected()) {
     reconnect();
   }
   client.subscribe(topic2);
+
+  /*
     
   if (temperatura> 30){
     client.publish(topic1, "hot");
-    //delay(100);
   }
   
   if (temperatura< 20){
@@ -177,7 +196,6 @@ void loop() {
 
   if (distancia <= 30 && distancia >= 0){
     client.publish(topic1, "beat");
-    Serial.println("Alarma.......");         // envia la palabra Alarma por el puerto serial
   }
   
   if (distancia <= 100 && distancia >= 31){
@@ -190,8 +208,8 @@ void loop() {
     Serial.println(" cm");
                      
   }
-  //Serial.println(distancia);
-   
+  Serial.println(temperatura);
+  */
   
   client.loop();
   
